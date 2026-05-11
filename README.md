@@ -1,5 +1,5 @@
 # ICCbin
-An R package facilitating clustered binary data generation, and estiomation of Intracluster Correlation Coefficient for binary data
+An R package facilitating clustered binary data generation, and estiamation of Intracluster Correlation Coefficient for binary data
 
 ## Project history
 
