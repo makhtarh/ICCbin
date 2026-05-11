@@ -1,42 +1,36 @@
 if (!exists("meta") || is.null(meta)) meta <- packageDescription("ICCbin")
 
-citHeader("To cite package", sQuote(meta$Package), "in publications use:")
-
 year <- sub(".*(2[[:digit:]]{3})-.*", "\\1", meta$Date, perl = TRUE)
 vers <- paste("R package version", meta$Version)
 
-citEntry(entry = "Manual",
+bibentry(
+  bibtype      = "Manual",
   title        = "ICCbin: Facilitates Clustered Binary Data Generation, and Estimation of Intracluster Correlation Coefficient (ICC) for Binary Data",
-  author       = personList(as.person("Akhtar Hossain"), as.person("Hrishikesh Chakraborty")),
-  note         = "R package version 1.2",
-  year         = "2019",
+  author       = c(person("Akhtar", "Hossain"), person("Hrishikesh", "Chakraborty")),
+  note         = vers,
+  year         = year,
   url          = "https://CRAN.R-project.org/package=ICCbin",
-
+  header       = paste("To cite package", sQuote(meta$Package), "in publications use:"),
   textVersion  =
-  paste("Hossain, A., & Chakraborty, H. (2019).",
-        "ICCbin: Facilitates Clustered Binary Data Generation, and Estimation of Intracluster Correlation Coefficient (ICC) for Binary Data.",
-        "R package version 1.2.",
-        "URL https://CRAN.R-project.org/package=ICCbin.")
+    paste0("Hossain, A., & Chakraborty, H. (", year, ").",
+          " ICCbin: Facilitates Clustered Binary Data Generation, and Estimation of Intracluster Correlation Coefficient (ICC) for Binary Data.",
+          " ", vers, ".",
+          " URL https://CRAN.R-project.org/package=ICCbin.")
 )
 
-
-
-citEntry(entry = "Article",
+bibentry(
+  bibtype      = "Article",
   title        = "R package to Estimate Intracluster Correlation Coefficient with Confidence Interval for Binary Data",
-  author       = personList(as.person("Hrishikesh Chakraborty"), as.person("Akhtar Hossain")),
+  author       = c(person("Hrishikesh", "Chakraborty"), person("Akhtar", "Hossain")),
   journal      = "Computer Methods and Programs in Biomedicine",
   year         = "2018",
   volume       = "155",
   pages        = "85--92",
   url          = "https://www.sciencedirect.com/science/article/pii/S0169260717305771",
-
+  footer       = "A BibTeX entry for LaTeX users is toBibtex(citation('ICCbin'))",
   textVersion  =
-  paste("Chakraborty, H., & Hossain, A. (2018).",
-        "R package to Estimate Intracluster Correlation Coefficient with Confidence Interval for Binary Data.",
-        "Computer Methods and Programs in Biomedicine, 155, 85-92.",
-        "URL https://www.sciencedirect.com/science/article/pii/S0169260717305771.")
+    paste("Chakraborty, H., & Hossain, A. (2018).",
+          "R package to Estimate Intracluster Correlation Coefficient with Confidence Interval for Binary Data.",
+          "Computer Methods and Programs in Biomedicine, 155, 85-92.",
+          "URL https://www.sciencedirect.com/science/article/pii/S0169260717305771.")
 )
-
-
-
-citFooter("A BibTeX entry for LaTeX users is toBibtex(citation('ICCbin'))")
