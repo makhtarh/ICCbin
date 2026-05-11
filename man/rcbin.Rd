@@ -38,10 +38,12 @@ rcbin(prop = .4, prvar = .2, noc = 30, csize = 20, csvar = .2, rho = .2)
 Lunn, A.D. and Davies, S.J., 1998. A note on generating correlated binary variables. Biometrika, 85(2), pp.487-490.
 }
 \seealso{
-\code{\link{rcbin1}} \code{\link{iccbin}}
+\code{\link{rcbin_flex}} for an enhanced version using Beta and
+  Negative Binomial distributions with actual variance inputs.
+  \code{\link{iccbin}}
 }
 \author{
-Akhtar Hossain \email{mhossain@email.sc.edu}
+Akhtar Hossain \email{ahossain@live.com}
 
-Hrishikesh Chakraborty \email{rishi.c@duke.edu}
+Hrishikesh Chakraborty \email{hrishikesh.chakraborty@duke.edu}
 }

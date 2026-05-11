@@ -15,10 +15,12 @@
 #'
 #' @references Lunn, A.D. and Davies, S.J., 1998. A note on generating correlated binary variables. Biometrika, 85(2), pp.487-490.
 #'
-#' @author Akhtar Hossain \email{mhossain@email.sc.edu}
-#' @author Hrishikesh Chakraborty \email{rishi.c@duke.edu}
+#' @author Akhtar Hossain \email{ahossain@live.com}
+#' @author Hrishikesh Chakraborty \email{hrishikesh.chakraborty@duke.edu}
 #'
-#' @seealso \code{\link{rcbin1}} \code{\link{iccbin}}
+#' @seealso \code{\link{rcbin_flex}} for an enhanced version using Beta and
+#'   Negative Binomial distributions with actual variance inputs.
+#'   \code{\link{iccbin}}
 #'
 #' @examples
 #' rcbin(prop = .4, prvar = .2, noc = 30, csize = 20, csvar = .2, rho = .2)
@@ -29,11 +31,11 @@
 #'
 
 rcbin <- function(prop = .5, prvar = 0, noc, csize, csvar = 0, rho){
-  if(noc < 0) stop("The argument 'noc' should be > 0")
-  if(prop < 0 || prop > 1) stop("The argument 'prob' should be in the range [0, 1]")
+  if(noc <= 0) stop("The argument 'noc' should be > 0")
+  if(prop < 0 || prop > 1) stop("The argument 'prop' should be in the range [0, 1]")
   if(prvar < 0 || prvar > 1) stop("The argument 'prvar' should be in the range [0, 1]")
-  if(csize < 2) stop("The argument 'cssize' should be >= 2")
-  if(csvar < 0) stop("The argument 'cssd' should be >= 0")
+  if(csize < 2) stop("The argument 'csize' should be >= 2")
+  if(csvar < 0) stop("The argument 'csvar' should be >= 0")
   if(rho < 0 || rho > 1) stop("The argument 'rho' should be in the range [0, 1]")
   cluster <- c(); x <- c()
   for(i in 1:noc){

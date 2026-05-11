@@ -1,6 +1,6 @@
-#' Estimates Intracluster Correlation coefficients (ICC) and it's confidence intervals (CI)
+#' Estimates Intracluster Correlation coefficients (ICC) and its confidence intervals (CI)
 #'
-#' Estimates Intracluster Correlation coefficients (ICC) in 16 different methods and it's confidence intervals (CI) in 5 different methods given the data on cluster labels and outcomes
+#' Estimates Intracluster Correlation coefficients (ICC) in 16 different methods and its confidence intervals (CI) in 5 different methods given the data on cluster labels and outcomes
 #'
 #' @param cid Column name indicating cluster id in the dataframe \code{data}
 #' @param y Column name indicating binary response in the dataframe \code{data}
@@ -16,13 +16,13 @@
 #' @details If in the dataframe, the cluster id (\code{cid}) is not a factor, it will be changed to a factor and a warning message will be given
 #' @details If estimate of ICC in any method is outside the interval [0, 1], the estimate and corresponding confidence interval (if appropriate) will not be provided and warning messages will be produced
 #' @details If the lower limit of any confidence interval is below 0 and upper limit is above 1, they will be replaced by 0 and 1 respectively and a warning message will be produced
-#' @details Method \code{aov} computes the analysis of variance estimate of ICC. This estimator was originally proposed for continuous variables, but various authors (e.g. Elston, 1977) have suggested it's use for binary variables
+#' @details Method \code{aov} computes the analysis of variance estimate of ICC. This estimator was originally proposed for continuous variables, but various authors (e.g. Elston, 1977) have suggested its use for binary variables
 #' @details Method \code{aovs} gives estimate of ICC using a modification of analysis of variance technique (see Fleiss, 1981)
 #' @details Method \code{keq} computes moment estimate of ICC suggested by Kleinman (1973), uses equal weight \eqn{w_{i} = 1/k}, for each of \eqn{k} clusters
 #' @details Method \code{kpr} computes moment estimate of ICC suggested by Kleinman (1973), uses weights proportional to cluster size \eqn{w_{i} = n_{i}/N}
 #' @details Method \code{keqs} gives a modified moment estimate of ICC with equal weights (\code{keq}) (see Kleinman, 1973)
 #' @details Method \code{kprs} gives a modified moment estimate of ICC with weights proportional to cluster size (\code{kpr}) (see Kleinman, 1973)
-#' @details Method \code{stab} provides a stabilizd estimate of ICC proposed by Tamura and Young (1987)
+#' @details Method \code{stab} provides a stabilized estimate of ICC proposed by Tamura and Young (1987)
 #' @details Method \code{ub} computes moment estimate of ICC from an unbiased estimating equation (see Yamamoto and Yanagimoto, 1992)
 #' @details Method \code{fc} gives Fleiss-Cuzick estimate of ICC (see Fleiss and Cuzick, 1979)
 #' @details Method \code{mak} computes Mak's estimate of ICC (see Mak, 1988)
@@ -32,15 +32,15 @@
 #' @details Method \code{rm} estimates ICC using resampling method proposed by Chakraborty and Sen (2016)
 #' @details Method \code{lin} estimates ICC using model linearization proposed by Goldstein et al. (2002)
 #' @details Method \code{sim} estimates ICC using Monte Carlo simulation proposed by Goldstein et al. (2002)
-#' @details CI type \code{aov} computes confidence interval for ICC using Simith's large sample approximation (see Smith, 1957)
+#' @details CI type \code{aov} computes confidence interval for ICC using Smith's large sample approximation (see Smith, 1957)
 #' @details CI type \code{wal} computes confidence interval for ICC using modified Wald test (see Zou and Donner, 2004).
 #' @details CI type \code{fc} gives Fleiss-Cuzick confidence interval for ICC (see Fleiss and Cuzick, 1979; and Zou and Donner, 2004)
 #' @details CI type \code{peq} estimates confidence interval for ICC based on direct calculation of correlation between observations within clusters (see Zou and Donner, 2004; and Wu, Crespi, and Wong, 2012)
 #' @details CI type \code{rm} gives confidence interval for ICC using resampling method by Chakraborty and Sen (2016)
 #'
 #'
-#' @author Akhtar Hossain \email{mhossain@email.sc.edu}
-#' @author Hirshikesh Chakraborty \email{rishi.c@duke.edu}
+#' @author Akhtar Hossain \email{ahossain@live.com}
+#' @author Hrishikesh Chakraborty \email{hrishikesh.chakraborty@duke.edu}
 #'
 #' @return
 #' \item{estimates}{A dataframe containing the name of methods used and corresponding estimates of Intracluster Correlation coefficients}
@@ -60,12 +60,24 @@
 #' @references Yamamoto, E. and Yanagimoto, T., 1992. Moment estimators for the beta-binomial distribution. Journal of applied statistics, 19(2), pp.273-283.
 #' @references Zou, G., Donner, A., 2004 Confidence interval estimation of the intraclass correlation coefficient for binary outcome data, Biometrics, 60(3), pp.807-811.
 #'
-#' @seealso \code{\link{rcbin}}
+#' @seealso \code{\link{rcbin}} \code{\link{rcbin_flex}}
 #'
 #' @examples
 #' bccdata <- rcbin(prop = .4, prvar = .2, noc = 30, csize = 20, csvar = .2, rho = .2)
-#' iccbin(cid = cid, y = y, data = bccdata)
+#'
+#' # Methods that do not require 'lme4'
+#' iccbin(cid = cid, y = y, data = bccdata,
+#'   method = c("aov", "aovs", "keq", "kpr", "keqs", "kprs", "stab", "ub",
+#'              "fc", "mak", "peq", "pgp", "ppr", "rm"))
+#'
 #' iccbin(cid = cid, y = y, data = bccdata, method = c("aov", "fc"), ci.type = "fc")
+#'
+#' \donttest{
+#' # All methods including 'lin' and 'sim' (requires 'lme4')
+#' if (requireNamespace("lme4", quietly = TRUE)) {
+#'   iccbin(cid = cid, y = y, data = bccdata)
+#' }
+#' }
 #'
 #' @importFrom stats aggregate na.omit qnorm binomial var
 #'
@@ -91,7 +103,7 @@ iccbin <- function(cid, y, data = NULL, method = c("aov", "aovs", "keq", "kpr", 
   if(is.character(ic$cid)){
     # warning("Please supply either an unquoted column name of 'data' or an object for 'cid'")
     if(missing(data)) stop("Supply either the unquoted name of an object containing 'cid' or supply both 'data' and then 'cid' as an unquoted column name to 'data'")
-    icall$cid <- eval(as.name(cid), data, parent.frame())
+    ic$cid <- eval(as.name(cid), data, parent.frame())
   }
   if(is.name(ic$cid)) ic$cid <- eval(ic$cid, data, parent.frame())
   if(is.call(ic$cid)) ic$cid <- eval(ic$cid, data, parent.frame())
@@ -104,7 +116,7 @@ iccbin <- function(cid, y, data = NULL, method = c("aov", "aovs", "keq", "kpr", 
   k <- length(unique(dt$cid))
 
   if(!is.null(attributes(dt)$na.action)){
-    warning(cat("NAs removed from data rows:\n", unclass(attributes(dt)$na.action), "\n"))
+    warning(paste("NAs removed from data rows:", paste(unclass(attributes(dt)$na.action), collapse = ", ")))
   }
 
   if(!is.factor(dt$cid)){
@@ -112,9 +124,20 @@ iccbin <- function(cid, y, data = NULL, method = c("aov", "aovs", "keq", "kpr", 
     dt$cid <- as.factor(dt$cid)
   } else{
     if(length(levels(dt$cid)) > k){
-      dt$x <- factor(as.character(dt$cid), levels = unique(dt$cid))
+      dt$cid <- factor(as.character(dt$cid), levels = unique(dt$cid))
       warning("Missing levels of 'cid' have been removed")
     }
+  }
+
+  # Remove singleton clusters (only one observation), which cause division by
+  # zero in several ICC estimators
+  singleton_clusters <- names(which(table(dt$cid) == 1))
+  if(length(singleton_clusters) > 0){
+    warning(paste("Singleton clusters (only one observation) have been removed:",
+                  paste(singleton_clusters, collapse = ", ")))
+    dt <- dt[!dt$cid %in% singleton_clusters, ]
+    dt$cid <- factor(as.character(dt$cid), levels = unique(as.character(dt$cid)))
+    k <- length(unique(dt$cid))
   }
 
   zalpha <- qnorm(alpha/2, lower.tail = F)
@@ -294,7 +317,6 @@ iccbin <- function(cid, y, data = NULL, method = c("aov", "aovs", "keq", "kpr", 
   if("stab" %in% method){
     meth <- c(meth, "Stabilized Moment Estimate")
     n0 <- (1/(k - 1))*(N - sum((ni^2)/N))
-    kappa = 0.45
     p <- sum(yi)/sum(ni)
     wi <- ni/N
     sw <- sum(wi*(pii - piw)^2)
@@ -443,105 +465,107 @@ iccbin <- function(cid, y, data = NULL, method = c("aov", "aovs", "keq", "kpr", 
   }
 
   # ::: Estimators using ressampling method; Chakraborty & Sen (2016) :::
-  # U ststistics
-  yi <- aggregate(y, by = list(cid), sum)[ , 2]
-  ni <- as.vector(table(cid))
-  n <- sum(ni)
-  u1 <- sum(yi)/N
-  alp <- u1
-  # Within cluster pairwise probabilities
-  ucid <- sort(unique(cid))
-  nw11 <- 0; nw10 <- 0; nw01 <- 0; nw00 <- 0
-  for(i in 1:k){
-    dti <- dt[cid == ucid[i], ]
-    wsamp1 <- c()
-    wsamp2 <- c()
-    for(m in 1:(nrow(dti) -1)){
-      wsamp1 <- c(wsamp1, rep(dti$y[m], length((m + 1):nrow(dti))))
-      wsamp2 <- c(wsamp2, dti$y[(m + 1):nrow(dti)])
-    }
-    wsamp <- rbind(wsamp1, wsamp2)
-    for(j in 1:ncol(wsamp)){
-      if(all(wsamp[ , j] == c(0, 0)) == TRUE){
-        nw00 <- nw00 + 1}
-      else if(all(wsamp[ , j] == c(0, 1)) == TRUE){
-        nw01 <- nw01 + 1}
-      else if(all(wsamp[ , j] == c(1, 0)) == TRUE){
-        nw10 <- nw10 + 1}
-      else{nw11 <- nw11 + 1}
-    }
-  }
-  # The frequencies are doubled as originiallny they were computed
-  # as half in above loop
-  nw11n <- nw11*2; nw00n <- nw00*2
-  nw10n <- nw10 + nw01; nw01n <- nw01 + nw10
-  uw11 <- nw11n/sum(ni*(ni - 1))
-  uw10 <- nw10n/sum(ni*(ni - 1))
-  uw01 <- nw01n/sum(ni*(ni - 1))
-  uw00 <- nw00n/sum(ni*(ni - 1))
-  tw <- uw11 + uw00 - uw10 - uw01
-
-  # Between cluster pairwise probabilities
-  nb11 <- 0; nb10 <- 0; nb01 <- 0; nb00 <- 0
-  for(i in 1:(k - 1)){
-    dti <- dt[cid == ucid[i], ]
-    for(m in (i + 1):k){
-      dtm <- dt[cid == ucid[m], ]
-      bsamp1 <- rep(dti$y, each = nrow(dtm))
-      bsamp2 <-rep(dtm$y, times = nrow(dti))
-      bsamp <- rbind(bsamp1, bsamp2)
-      for(j in 1:ncol(bsamp)){
-        if(all(bsamp[ , j] == c(0, 0)) == TRUE){
-          nb00 <- nb00 + 1}
-        else if(all(bsamp[ , j] == c(0, 1)) == TRUE){
-          nb01 <- nb01 + 1}
-        else if(all(bsamp[ , j] == c(1, 0)) == TRUE){
-          nb10 <- nb10 + 1}
-        else{nb11 <- nb11 + 1}
+  if("rm" %in% method | "rm" %in% ci.type){
+    # U ststistics
+    yi <- aggregate(y, by = list(cid), sum)[ , 2]
+    ni <- as.vector(table(cid))
+    n <- sum(ni)
+    u1 <- sum(yi)/N
+    alp <- u1
+    # Within cluster pairwise probabilities
+    ucid <- sort(unique(cid))
+    nw11 <- 0; nw10 <- 0; nw01 <- 0; nw00 <- 0
+    for(i in 1:k){
+      dti <- dt[cid == ucid[i], ]
+      wsamp1 <- c()
+      wsamp2 <- c()
+      for(m in 1:(nrow(dti) -1)){
+        wsamp1 <- c(wsamp1, rep(dti$y[m], length((m + 1):nrow(dti))))
+        wsamp2 <- c(wsamp2, dti$y[(m + 1):nrow(dti)])
+      }
+      wsamp <- rbind(wsamp1, wsamp2)
+      for(j in 1:ncol(wsamp)){
+        if(all(wsamp[ , j] == c(0, 0)) == TRUE){
+          nw00 <- nw00 + 1}
+        else if(all(wsamp[ , j] == c(0, 1)) == TRUE){
+          nw01 <- nw01 + 1}
+        else if(all(wsamp[ , j] == c(1, 0)) == TRUE){
+          nw10 <- nw10 + 1}
+        else{nw11 <- nw11 + 1}
       }
     }
-  }
-  # The frequencies are doubled as originiallny they were computed
-  # as half in above loop
-  nb11n <- nb11*2; nb00n <- nb00*2
-  nb10n <- nb10 + nb01; nb01n <- nb01 + nb10
-  ub11 <- nb11n/(N*(N - 1) - sum(ni*(ni - 1)))
-  ub10 <- nb10n/(N*(N - 1) - sum(ni*(ni - 1)))
-  ub01 <- nb01n/(N*(N - 1) - sum(ni*(ni - 1)))
-  ub00 <- nb00n/(N*(N - 1) - sum(ni*(ni - 1)))
-  tb <- ub11 + ub00 - ub10 - ub01
+    # The frequencies are doubled as originiallny they were computed
+    # as half in above loop
+    nw11n <- nw11*2; nw00n <- nw00*2
+    nw10n <- nw10 + nw01; nw01n <- nw01 + nw10
+    uw11 <- nw11n/sum(ni*(ni - 1))
+    uw10 <- nw10n/sum(ni*(ni - 1))
+    uw01 <- nw01n/sum(ni*(ni - 1))
+    uw00 <- nw00n/sum(ni*(ni - 1))
+    tw <- uw11 + uw00 - uw10 - uw01
 
-  rho.rm <- (tw - tb)/(4*u1*(1 - u1))
-  if("rm" %in% method){
-    meth <- c(meth, "Resampling Estimate")
-    if(rho.rm < 0 | rho.rm > 1){
-      est <- c(est, "-")
-      warning("ICC Not Estimable by 'Resampling' Method")
-    } else{
-      est <- c(est, rho.rm)
+    # Between cluster pairwise probabilities
+    nb11 <- 0; nb10 <- 0; nb01 <- 0; nb00 <- 0
+    for(i in 1:(k - 1)){
+      dti <- dt[cid == ucid[i], ]
+      for(m in (i + 1):k){
+        dtm <- dt[cid == ucid[m], ]
+        bsamp1 <- rep(dti$y, each = nrow(dtm))
+        bsamp2 <-rep(dtm$y, times = nrow(dti))
+        bsamp <- rbind(bsamp1, bsamp2)
+        for(j in 1:ncol(bsamp)){
+          if(all(bsamp[ , j] == c(0, 0)) == TRUE){
+            nb00 <- nb00 + 1}
+          else if(all(bsamp[ , j] == c(0, 1)) == TRUE){
+            nb01 <- nb01 + 1}
+          else if(all(bsamp[ , j] == c(1, 0)) == TRUE){
+            nb10 <- nb10 + 1}
+          else{nb11 <- nb11 + 1}
+        }
+      }
     }
-  }
+    # The frequencies are doubled as originiallny they were computed
+    # as half in above loop
+    nb11n <- nb11*2; nb00n <- nb00*2
+    nb10n <- nb10 + nb01; nb01n <- nb01 + nb10
+    ub11 <- nb11n/(N*(N - 1) - sum(ni*(ni - 1)))
+    ub10 <- nb10n/(N*(N - 1) - sum(ni*(ni - 1)))
+    ub01 <- nb01n/(N*(N - 1) - sum(ni*(ni - 1)))
+    ub00 <- nb00n/(N*(N - 1) - sum(ni*(ni - 1)))
+    tb <- ub11 + ub00 - ub10 - ub01
 
-  if("rm" %in% ci.type){
-    ci.typ <- c(ci.typ, "Resampling Based Confidence Interval")
-    if(rho.rm < 0 | rho.rm > 1){
-      lci <- c(lci, "-")
-      uci <- c(uci, "-")
-      warning("Resampling Based Confidence Interval for ICC is Not Estimable")
-    } else{
-    t0.rm <- 1/(16*n*square(u1)*square(1 - u1))
-    t1.rm <- 1/(n^2 - sum(ni^2)) + square(2*alp*(1 - alp) + 1)
-    t2.rm <- (alp*(1  -alp)/(sum(ni^2) - n))*((1 + alp - rho.rm*alp)*(alp + rho.rm*(1 - alp)) +
-                                                (1 - alp + rho.rm*alp)*(2 - alp - rho.rm*(1 - alp)) + 2*(1 + rho.rm)*(1 - alp*(1 - alp)*(1 + rho.rm)))
-    t3.rm <- ((alp*(1 - alp)*square(tw - tb)*square(1 - 2*u1))/(square(u1*(1 - u1))))*(1/n + (rho.rm/n^2)*sum(ni*(1 - ni)))
-    var.rho.rm <- t0.rm*(t1.rm + t2.rm + t3.rm)
-    ci.rho.rm <- c(rho.rm - zalpha*sqrt(var.rho.rm), rho.rm + zalpha*sqrt(var.rho.rm))
-    lci <- c(lci, ifelse(ci.rho.rm[1] < 0, 0, ci.rho.rm[1]))
-    uci <- c(uci, ifelse(ci.rho.rm[2] > 1, 1, ci.rho.rm[2]))
-    if(ci.rho.rm[1] < 0 | ci.rho.rm[2] > 1){
-      warning("One or Both of 'Resampling Based' Confidence Limits Fell Outside of [0, 1]")
+    rho.rm <- (tw - tb)/(4*u1*(1 - u1))
+    if("rm" %in% method){
+      meth <- c(meth, "Resampling Estimate")
+      if(rho.rm < 0 | rho.rm > 1){
+        est <- c(est, "-")
+        warning("ICC Not Estimable by 'Resampling' Method")
+      } else{
+        est <- c(est, rho.rm)
+      }
     }
-   }
+
+    if("rm" %in% ci.type){
+      ci.typ <- c(ci.typ, "Resampling Based Confidence Interval")
+      if(rho.rm < 0 | rho.rm > 1){
+        lci <- c(lci, "-")
+        uci <- c(uci, "-")
+        warning("Resampling Based Confidence Interval for ICC is Not Estimable")
+      } else{
+        t0.rm <- 1/(16*n*square(u1)*square(1 - u1))
+        t1.rm <- 1/(n^2 - sum(ni^2)) + square(2*alp*(1 - alp) + 1)
+        t2.rm <- (alp*(1  -alp)/(sum(ni^2) - n))*((1 + alp - rho.rm*alp)*(alp + rho.rm*(1 - alp)) +
+                                                    (1 - alp + rho.rm*alp)*(2 - alp - rho.rm*(1 - alp)) + 2*(1 + rho.rm)*(1 - alp*(1 - alp)*(1 + rho.rm)))
+        t3.rm <- ((alp*(1 - alp)*square(tw - tb)*square(1 - 2*u1))/(square(u1*(1 - u1))))*(1/n + (rho.rm/n^2)*sum(ni*(1 - ni)))
+        var.rho.rm <- t0.rm*(t1.rm + t2.rm + t3.rm)
+        ci.rho.rm <- c(rho.rm - zalpha*sqrt(var.rho.rm), rho.rm + zalpha*sqrt(var.rho.rm))
+        lci <- c(lci, ifelse(ci.rho.rm[1] < 0, 0, ci.rho.rm[1]))
+        uci <- c(uci, ifelse(ci.rho.rm[2] > 1, 1, ci.rho.rm[2]))
+        if(ci.rho.rm[1] < 0 | ci.rho.rm[2] > 1){
+          warning("One or Both of 'Resampling Based' Confidence Limits Fell Outside of [0, 1]")
+        }
+      }
+    }
   }
 
   # Model Linearization and Monte Carlo Simulation Methods; Goldstein et al. (2002)

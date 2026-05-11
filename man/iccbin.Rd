@@ -2,12 +2,20 @@
 % Please edit documentation in R/iccbin.R
 \name{iccbin}
 \alias{iccbin}
-\title{Estimates Intracluster Correlation coefficients (ICC) and it's confidence intervals (CI)}
+\title{Estimates Intracluster Correlation coefficients (ICC) and its confidence intervals (CI)}
 \usage{
-iccbin(cid, y, data = NULL, method = c("aov", "aovs", "keq", "kpr",
-  "keqs", "kprs", "stab", "ub", "fc", "mak", "peq", "pgp", "ppr", "rm",
-  "lin", "sim"), ci.type = c("aov", "wal", "fc", "peq", "rm"),
-  alpha = 0.05, kappa = 0.45, nAGQ = 1, M = 1000)
+iccbin(
+  cid,
+  y,
+  data = NULL,
+  method = c("aov", "aovs", "keq", "kpr", "keqs", "kprs", "stab", "ub", "fc", "mak",
+    "peq", "pgp", "ppr", "rm", "lin", "sim"),
+  ci.type = c("aov", "wal", "fc", "peq", "rm"),
+  alpha = 0.05,
+  kappa = 0.45,
+  nAGQ = 1,
+  M = 1000
+)
 }
 \arguments{
 \item{cid}{Column name indicating cluster id in the dataframe \code{data}}
@@ -34,7 +42,7 @@ Used when the method \code{lin} is chosen. Default value is 1}
 \item{ci}{A dataframe containing names of confidence interval types and corresponding estimated confidence intervals}
 }
 \description{
-Estimates Intracluster Correlation coefficients (ICC) in 16 different methods and it's confidence intervals (CI) in 5 different methods given the data on cluster labels and outcomes
+Estimates Intracluster Correlation coefficients (ICC) in 16 different methods and its confidence intervals (CI) in 5 different methods given the data on cluster labels and outcomes
 }
 \details{
 If in the dataframe, the cluster id (\code{cid}) is not a factor, it will be changed to a factor and a warning message will be given
@@ -43,7 +51,7 @@ If estimate of ICC in any method is outside the interval [0, 1], the estimate an
 
 If the lower limit of any confidence interval is below 0 and upper limit is above 1, they will be replaced by 0 and 1 respectively and a warning message will be produced
 
-Method \code{aov} computes the analysis of variance estimate of ICC. This estimator was originally proposed for continuous variables, but various authors (e.g. Elston, 1977) have suggested it's use for binary variables
+Method \code{aov} computes the analysis of variance estimate of ICC. This estimator was originally proposed for continuous variables, but various authors (e.g. Elston, 1977) have suggested its use for binary variables
 
 Method \code{aovs} gives estimate of ICC using a modification of analysis of variance technique (see Fleiss, 1981)
 
@@ -55,7 +63,7 @@ Method \code{keqs} gives a modified moment estimate of ICC with equal weights (\
 
 Method \code{kprs} gives a modified moment estimate of ICC with weights proportional to cluster size (\code{kpr}) (see Kleinman, 1973)
 
-Method \code{stab} provides a stabilizd estimate of ICC proposed by Tamura and Young (1987)
+Method \code{stab} provides a stabilized estimate of ICC proposed by Tamura and Young (1987)
 
 Method \code{ub} computes moment estimate of ICC from an unbiased estimating equation (see Yamamoto and Yanagimoto, 1992)
 
@@ -75,7 +83,7 @@ Method \code{lin} estimates ICC using model linearization proposed by Goldstein 
 
 Method \code{sim} estimates ICC using Monte Carlo simulation proposed by Goldstein et al. (2002)
 
-CI type \code{aov} computes confidence interval for ICC using Simith's large sample approximation (see Smith, 1957)
+CI type \code{aov} computes confidence interval for ICC using Smith's large sample approximation (see Smith, 1957)
 
 CI type \code{wal} computes confidence interval for ICC using modified Wald test (see Zou and Donner, 2004).
 
@@ -87,8 +95,20 @@ CI type \code{rm} gives confidence interval for ICC using resampling method by C
 }
 \examples{
 bccdata <- rcbin(prop = .4, prvar = .2, noc = 30, csize = 20, csvar = .2, rho = .2)
-iccbin(cid = cid, y = y, data = bccdata)
+
+# Methods that do not require 'lme4'
+iccbin(cid = cid, y = y, data = bccdata,
+  method = c("aov", "aovs", "keq", "kpr", "keqs", "kprs", "stab", "ub",
+             "fc", "mak", "peq", "pgp", "ppr", "rm"))
+
 iccbin(cid = cid, y = y, data = bccdata, method = c("aov", "fc"), ci.type = "fc")
+
+\donttest{
+# All methods including 'lin' and 'sim' (requires 'lme4')
+if (requireNamespace("lme4", quietly = TRUE)) {
+  iccbin(cid = cid, y = y, data = bccdata)
+}
+}
 
 }
 \references{
@@ -119,10 +139,10 @@ Yamamoto, E. and Yanagimoto, T., 1992. Moment estimators for the beta-binomial d
 Zou, G., Donner, A., 2004 Confidence interval estimation of the intraclass correlation coefficient for binary outcome data, Biometrics, 60(3), pp.807-811.
 }
 \seealso{
-\code{\link{rcbin}}
+\code{\link{rcbin}} \code{\link{rcbin_flex}}
 }
 \author{
-Akhtar Hossain \email{mhossain@email.sc.edu}
+Akhtar Hossain \email{ahossain@live.com}
 
-Hirshikesh Chakraborty \email{rishi.c@duke.edu}
+Hrishikesh Chakraborty \email{hrishikesh.chakraborty@duke.edu}
 }

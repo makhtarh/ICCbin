@@ -2,7 +2,7 @@
 
 export(iccbin)
 export(rcbin)
-export(rcbin1)
+export(rcbin_flex)
 importFrom(stats,aggregate)
 importFrom(stats,binomial)
 importFrom(stats,na.omit)
