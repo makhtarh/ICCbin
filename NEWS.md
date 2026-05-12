@@ -1,3 +1,8 @@
+# ICCbin 1.2.1
+
+* Fixed CITATION file: replaced deprecated `citHeader()`/`citFooter()` with
+  `header`/`footer` arguments in `bibentry()`.
+
 # ICCbin 1.2.0
 
 * Added `rcbin_flex()`, an enhanced alternative to `rcbin()` that uses a Beta
